@@ -160,32 +160,47 @@ public class ProductosDAO {
 
     }
 
-    public static void restarProductosDB(String nombre) {
+    public static ArrayList restarProductosDB(ArrayList<String> Nombres, ArrayList<Integer> Cantidades) {
 
         Conexion dbConnect = new Conexion();
 
+        ArrayList<String> resultados = new ArrayList<>();
+
         try (Connection conexion = dbConnect.get_connection()) {
             PreparedStatement ps = null;
+            ResultSet rs = null;
 
-            try {
-                String query = "DELETE FROM productos WHERE idProducto = ?";
+            for (int i = 0; i < Nombres.size(); i++) {
+                String query = "SELECT cantidad FROM productos WHERE nombre =?";
                 ps = conexion.prepareStatement(query);
-                ps.setString(1, nombre);
+                ps.setString(1, Nombres.get(i));
 
-                ps.executeUpdate();
+                rs = ps.executeQuery();
+                rs.next();
 
-                System.out.println("");
-                System.out.println("--------------------------------");
-                System.out.println("Producto eliminado correctamente");
-                System.out.println("--------------------------------");
-                System.out.println("");
+                int existencias = rs.getInt("cantidad");
 
-            } catch (Exception e) {
+                if (existencias < Cantidades.get(i)) {
+                    resultados.add("No se pudo comprar el producto: " + Nombres.get(i) + ". Cantidades insuficientes");
+                } else {
+                    int resta = existencias-Cantidades.get(i);
+                    query = "UPDATE productos SET cantidad = (" +String.valueOf(resta)+") WHERE nombre =?;";
+                    ps = conexion.prepareStatement(query);
+                    ps.setString(1, Nombres.get(i));
+
+                    ps.executeUpdate();
+
+                    System.out.println("Se ha actualizado la base de Datos.");
+                    resultados.add("Se compró el producto: " + Nombres.get(i) + " exitosamente.");
+                }
             }
 
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            return resultados;
         }
+
     }
 
 }

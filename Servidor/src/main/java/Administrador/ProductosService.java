@@ -41,11 +41,16 @@ public class ProductosService {
     }
 
     public static ArrayList listarProductosServidor() {
-        
-        ArrayList<String> Datos = new ArrayList<>();
-        Datos = ProductosDAO.leerDBServidor();
+
+        ArrayList<String> Datos = ProductosDAO.leerDBServidor();
 
         return Datos;
+    }
+
+    public static ArrayList realizarcomprasServidor(ArrayList<String> Nombres, ArrayList<Integer> Cantidades) {
+
+        ArrayList<String> resultados = ProductosDAO.restarProductosDB(Nombres, Cantidades);
+        return resultados;
     }
 
     public static void borrarProducto() {
