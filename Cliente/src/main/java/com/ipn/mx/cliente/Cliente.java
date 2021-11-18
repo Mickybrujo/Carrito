@@ -29,6 +29,16 @@ public class Cliente {
             DataOutputStream salida = new DataOutputStream(conexion.getOutputStream());
             DataInputStream entrada = new DataInputStream(conexion.getInputStream());
 
+            //Código para mostrar la interfaz con las imágenes
+            Interfaz frame = new Interfaz("cerveza","galletas","gansito","hotnuts","leche","pinguinos","carrito","logo2");
+            
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+            //Código para mostrar la interfaz con las imágenes
+            
             menuCliente(conexion);
 
             conexion.close();
