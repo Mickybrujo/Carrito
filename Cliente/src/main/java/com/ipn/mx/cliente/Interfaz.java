@@ -1,4 +1,4 @@
-package practica1cliente;
+package com.ipn.mx.cliente;
 
 public class Interfaz extends javax.swing.JFrame {
 
